@@ -21,6 +21,13 @@ def calculate_ped(p1: float, p2: float, q1: float, q2: float) -> float:
     return ped
 
 
+def _percent_change_arc(v1: float, v2: float) -> float:
+    avg = (v1 + v2) / 2.0
+    if avg == 0:
+        raise ValueError("Average value is 0; percent change is undefined.")
+    return ((v2 - v1) / avg) * 100.0
+
+
 def classify_ped(ped: float) -> str:
     """
     Classify the elasticity value.
@@ -55,7 +62,12 @@ def index():
                 "q1": q1,
                 "q2": q2,
                 "ped": round(ped_value, 3),
+                "ped_raw": ped_value,
                 "classification": classification,
+                "delta_p": p2 - p1,
+                "delta_q": q2 - q1,
+                "pct_change_p": round(_percent_change_arc(p1, p2), 3),
+                "pct_change_q": round(_percent_change_arc(q1, q2), 3),
             }
         except (TypeError, ValueError) as exc:
             error = str(exc) or "Invalid input values. Please check your numbers."

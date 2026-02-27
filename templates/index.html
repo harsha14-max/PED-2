@@ -44,6 +44,12 @@
     .badge-unit {
       background: #3b82f6;
     }
+    .chart-wrap {
+      background: #0b1220;
+      border: 1px solid #1e293b;
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -165,6 +171,27 @@
             {{ result.classification }}
           </span>
 
+          <div class="row g-3 mt-3">
+            <div class="col-md-6">
+              <div class="chart-wrap">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="fw-semibold">Demand plot (Price vs Quantity)</div>
+                  <div class="text-secondary small">P on Y, Q on X</div>
+                </div>
+                <canvas id="chartDemand" height="220"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="chart-wrap">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="fw-semibold">% change (arc method)</div>
+                  <div class="text-secondary small">relative to average</div>
+                </div>
+                <canvas id="chartPct" height="220"></canvas>
+              </div>
+            </div>
+          </div>
+
           <hr class="border-secondary my-4" />
           <p class="text-secondary mb-0">
             Interpretation:
@@ -174,6 +201,96 @@
             |PED| &gt; 1 → Elastic (quantity changes more than price)
           </p>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script>
+          (function () {
+            const result = {{ result | tojson }};
+
+            const demandCtx = document.getElementById("chartDemand");
+            const pctCtx = document.getElementById("chartPct");
+
+            const demandPoints = [
+              { x: result.q1, y: result.p1 },
+              { x: result.q2, y: result.p2 }
+            ].sort((a, b) => a.x - b.x);
+
+            new Chart(demandCtx, {
+              type: "scatter",
+              data: {
+                datasets: [{
+                  label: "Observed points",
+                  data: demandPoints,
+                  borderColor: "#06b6d4",
+                  backgroundColor: "#06b6d4",
+                  showLine: true,
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+                  tension: 0
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctx) => `Q=${ctx.parsed.x}, P=${ctx.parsed.y}`
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    title: { display: true, text: "Quantity (Q)" },
+                    grid: { color: "rgba(148,163,184,0.15)" },
+                    ticks: { color: "#cbd5e1" }
+                  },
+                  y: {
+                    title: { display: true, text: "Price (P)" },
+                    grid: { color: "rgba(148,163,184,0.15)" },
+                    ticks: { color: "#cbd5e1" }
+                  }
+                }
+              }
+            });
+
+            new Chart(pctCtx, {
+              type: "bar",
+              data: {
+                labels: ["%ΔPrice", "%ΔQuantity"],
+                datasets: [{
+                  label: "Percent change",
+                  data: [result.pct_change_p, result.pct_change_q],
+                  backgroundColor: ["rgba(99,102,241,0.8)", "rgba(34,197,94,0.8)"],
+                  borderColor: ["#6366f1", "#22c55e"],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctx) => `${ctx.parsed.y}%`
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    grid: { display: false },
+                    ticks: { color: "#cbd5e1" }
+                  },
+                  y: {
+                    title: { display: true, text: "Percent (%)" },
+                    grid: { color: "rgba(148,163,184,0.15)" },
+                    ticks: { color: "#cbd5e1" }
+                  }
+                }
+              }
+            });
+          })();
+        </script>
         {% endif %}
       </div>
     </div>
