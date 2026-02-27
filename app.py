@@ -33,21 +33,21 @@ def index():
             q1 = float(form_values["q1"])
             q2 = float(form_values["q2"])
 
-            ped_arc_signed = calculate_ped_arc(p1, p2, q1, q2)
-            ped_prop_signed = calculate_ped_proportionate(p1, p2, q1, q2)
+            ped_arc = calculate_ped_arc(p1, p2, q1, q2)
+            ped_prop = calculate_ped_proportionate(p1, p2, q1, q2)
 
-            ped_arc_abs = abs(ped_arc_signed)
-            ped_prop_abs = abs(ped_prop_signed)
+            ped_arc_abs = abs(ped_arc)
+            ped_prop_abs = abs(ped_prop)
 
-            classification = classify_ped(ped_arc_signed)
+            classification = classify_ped(ped_arc)
 
             result = {
                 "p1": p1,
                 "p2": p2,
                 "q1": q1,
                 "q2": q2,
+                # Expose only the absolute PED to the template
                 "ped": round(ped_arc_abs, 3),
-                "ped_raw": ped_arc_signed,
                 "ped_abs": round(ped_arc_abs, 3),
                 "ped_arc_abs": round(ped_arc_abs, 3),
                 "ped_prop_abs": round(ped_prop_abs, 3),

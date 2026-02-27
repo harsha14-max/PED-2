@@ -12,8 +12,10 @@ def calculate_ped_arc(p1: float, p2: float, q1: float, q2: float) -> float:
     if delta_p == 0:
         raise ValueError("Price change (ΔP) must be non-zero.")
 
-    # User-specified arc method: abs((ΔQ/ΔP) * (P1/Q1 + P2/Q2))
-    return (delta_q / delta_p) * ((p1 / q1) + (p2 / q2))
+    # Arc method core: (ΔQ/ΔP) * (P1/Q1 + P2/Q2)
+    core = (delta_q / delta_p) * ((p1 / q1) + (p2 / q2))
+    # Always return absolute value so PED is never negative
+    return abs(core)
 
 
 def calculate_ped_proportionate(p1: float, p2: float, q1: float, q2: float) -> float:
@@ -25,8 +27,10 @@ def calculate_ped_proportionate(p1: float, p2: float, q1: float, q2: float) -> f
     if q1 == 0:
         raise ValueError("Initial quantity (Q1) must be non-zero.")
 
-    # Proportionate method: abs((ΔQ/ΔP) * (P1/Q1))
-    return (delta_q / delta_p) * (p1 / q1)
+    # Proportionate method core: (ΔQ/ΔP) * (P1/Q1)
+    core = (delta_q / delta_p) * (p1 / q1)
+    # Always return absolute value so PED is never negative
+    return abs(core)
 
 
 def classify_ped(ped: float) -> str:

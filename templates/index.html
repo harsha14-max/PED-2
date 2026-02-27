@@ -154,14 +154,13 @@
               <div class="d-flex align-items-end gap-2">
                 <div class="display-6 fw-bold mb-0">PED</div>
                 <div class="display-6 fw-bold mb-0">=</div>
-                <div class="display-6 fw-bold mb-0">{{ result.ped_arc_abs }}</div>
+                <div class="display-6 fw-bold mb-0">{{ result.ped }}</div>
               </div>
               <div class="muted small mt-1">
-                Arc method |PED| = {{ result.ped_arc_abs }} &nbsp;·&nbsp;
-                Proportionate |PED| = {{ result.ped_prop_abs }}
+                |PED| (absolute value) = {{ result.ped }}
               </div>
               <div class="muted small mt-1">
-                Note: For many “normal” goods, PED is typically negative (price up → quantity down).
+                Interpreting |PED|: values below 1 are inelastic, 1 is unit elastic, and above 1 are elastic.
               </div>
             </div>
 
@@ -192,25 +191,25 @@
             <div class="col-sm-6 col-lg-3">
               <div class="kpi">
                 <div class="label">ΔPrice</div>
-                <div class="value">{{ result.delta_p }}</div>
+                <div class="value">{{ result.delta_p|abs }}</div>
               </div>
             </div>
             <div class="col-sm-6 col-lg-3">
               <div class="kpi">
                 <div class="label">ΔQuantity</div>
-                <div class="value">{{ result.delta_q }}</div>
+                <div class="value">{{ result.delta_q|abs }}</div>
               </div>
             </div>
             <div class="col-sm-6 col-lg-3">
               <div class="kpi">
                 <div class="label">%ΔPrice (arc)</div>
-                <div class="value">{{ result.pct_change_p }}%</div>
+                <div class="value">{{ result.pct_change_p|abs }}%</div>
               </div>
             </div>
             <div class="col-sm-6 col-lg-3">
               <div class="kpi">
                 <div class="label">%ΔQuantity (arc)</div>
-                <div class="value">{{ result.pct_change_q }}%</div>
+                <div class="value">{{ result.pct_change_q|abs }}%</div>
               </div>
             </div>
           </div>
