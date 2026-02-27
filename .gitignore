@@ -34,3 +34,20 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+
+# Python artifacts (PED web app)
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local environment / secrets
+.env
+.env.*
+
+# Common R generated plot output
+Rplots.pdf

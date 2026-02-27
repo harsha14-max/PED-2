@@ -2,6 +2,23 @@
 Calculating regular and cross price elasticity for products based on weekly sales data
   
 
+## PED Web App (localhost)
+This repository includes a small **Price Elasticity of Demand (PED) calculator web app**.
+
+### Run on Windows
+- Double-click `run_ped_app.bat`
+- Then open `http://127.0.0.1:5000` in your browser.
+
+### Run manually (PowerShell / CMD)
+From the repo root:
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+Then open `http://127.0.0.1:5000`.
+
 ## DATA REQUIREMENTS
 You can find a sample dataset in this repository, based on a real offline sales of a small company for several products. Similar to typical FMCG market data sales is reported on weekly level, both in value and volume.
 To simplify - as with marketing mix modelling the more variables describing sales you will add to the regression model, the more valid your general results will be. Adding competitors pricing, promotional actions or distribution will most likely significantly help.
