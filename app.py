@@ -2,7 +2,12 @@ import os
 
 from flask import Flask, render_template, request
 
-from ped import calculate_ped_arc, classify_ped, percent_change_arc
+from ped import (
+    calculate_ped_arc,
+    calculate_ped_proportionate,
+    classify_ped,
+    percent_change_arc,
+)
 
 
 app = Flask(__name__)
@@ -28,16 +33,24 @@ def index():
             q1 = float(form_values["q1"])
             q2 = float(form_values["q2"])
 
-            ped_value = calculate_ped_arc(p1, p2, q1, q2)
-            classification = classify_ped(ped_value)
+            ped_arc_signed = calculate_ped_arc(p1, p2, q1, q2)
+            ped_prop_signed = calculate_ped_proportionate(p1, p2, q1, q2)
+
+            ped_arc_abs = abs(ped_arc_signed)
+            ped_prop_abs = abs(ped_prop_signed)
+
+            classification = classify_ped(ped_arc_signed)
 
             result = {
                 "p1": p1,
                 "p2": p2,
                 "q1": q1,
                 "q2": q2,
-                "ped": round(ped_value, 3),
-                "ped_raw": ped_value,
+                "ped": round(ped_arc_abs, 3),
+                "ped_raw": ped_arc_signed,
+                "ped_abs": round(ped_arc_abs, 3),
+                "ped_arc_abs": round(ped_arc_abs, 3),
+                "ped_prop_abs": round(ped_prop_abs, 3),
                 "classification": classification,
                 "delta_p": p2 - p1,
                 "delta_q": q2 - q1,

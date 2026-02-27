@@ -28,15 +28,10 @@
   <div class="container py-4 py-lg-5">
     <div class="row align-items-start g-4">
       <div class="col-12">
-        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-3 mb-2">
-          <div>
-            <h1 class="fw-bold mb-1">Price Elasticity of Demand</h1>
-            <div class="muted">
-              Compute PED from two price–quantity observations using the arc (midpoint) method.
-            </div>
-          </div>
-          <div class="pill">
-            \( PED = \frac{\Delta Q / Q_{avg}}{\Delta P / P_{avg}} \)
+        <div class="mb-2">
+          <h1 class="fw-bold mb-1">Price Elasticity of Demand</h1>
+          <div class="muted">
+            Compute PED from two price–quantity observations using the arc (midpoint) method.
           </div>
         </div>
       </div>
@@ -159,7 +154,11 @@
               <div class="d-flex align-items-end gap-2">
                 <div class="display-6 fw-bold mb-0">PED</div>
                 <div class="display-6 fw-bold mb-0">=</div>
-                <div class="display-6 fw-bold mb-0">{{ result.ped }}</div>
+                <div class="display-6 fw-bold mb-0">{{ result.ped_arc_abs }}</div>
+              </div>
+              <div class="muted small mt-1">
+                Arc method |PED| = {{ result.ped_arc_abs }} &nbsp;·&nbsp;
+                Proportionate |PED| = {{ result.ped_prop_abs }}
               </div>
               <div class="muted small mt-1">
                 Note: For many “normal” goods, PED is typically negative (price up → quantity down).

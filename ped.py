@@ -6,19 +6,27 @@ def percent_change_arc(v1: float, v2: float) -> float:
 
 
 def calculate_ped_arc(p1: float, p2: float, q1: float, q2: float) -> float:
-    """
-    Arc elasticity (midpoint) PED:
-      PED = (ΔQ / Q_avg) / (ΔP / P_avg)
-    """
     delta_q = q2 - q1
     delta_p = p2 - p1
-    q_avg = (q1 + q2) / 2.0
-    p_avg = (p1 + p2) / 2.0
 
-    if delta_p == 0 or p_avg == 0 or q_avg == 0:
-        raise ValueError("Price and quantity changes must be non-zero for PED calculation.")
+    if delta_p == 0:
+        raise ValueError("Price change (ΔP) must be non-zero.")
 
-    return (delta_q / q_avg) / (delta_p / p_avg)
+    # User-specified arc method: abs((ΔQ/ΔP) * (P1/Q1 + P2/Q2))
+    return (delta_q / delta_p) * ((p1 / q1) + (p2 / q2))
+
+
+def calculate_ped_proportionate(p1: float, p2: float, q1: float, q2: float) -> float:
+    delta_q = q2 - q1
+    delta_p = p2 - p1
+
+    if delta_p == 0:
+        raise ValueError("Price change (ΔP) must be non-zero.")
+    if q1 == 0:
+        raise ValueError("Initial quantity (Q1) must be non-zero.")
+
+    # Proportionate method: abs((ΔQ/ΔP) * (P1/Q1))
+    return (delta_q / delta_p) * (p1 / q1)
 
 
 def classify_ped(ped: float) -> str:
