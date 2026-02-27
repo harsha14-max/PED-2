@@ -14,10 +14,16 @@ From the repo root:
 
 ```bash
 pip install -r requirements.txt
-python app.py
+python -m waitress --listen=127.0.0.1:5000 app:app
 ```
 
 Then open `http://127.0.0.1:5000`.
+
+### Run tests
+
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
 
 ## DATA REQUIREMENTS
 You can find a sample dataset in this repository, based on a real offline sales of a small company for several products. Similar to typical FMCG market data sales is reported on weekly level, both in value and volume.

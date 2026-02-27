@@ -21,5 +21,5 @@ echo Open this in your browser: http://127.0.0.1:5000
 echo Press Ctrl+C to stop the server.
 echo.
 
-python app.py
+python -m waitress --listen=127.0.0.1:5000 app:app
 
