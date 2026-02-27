@@ -11,112 +11,221 @@
     crossorigin="anonymous"
   />
   <style>
+    :root {
+      --bg0: #060914;
+      --bg1: #0b1220;
+      --card: rgba(2, 6, 23, 0.72);
+      --border: rgba(148, 163, 184, 0.18);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accentA: #6366f1;
+      --accentB: #06b6d4;
+      --good: #22c55e;
+      --warn: #f97316;
+      --info: #3b82f6;
+    }
+
     body {
-      background: #0f172a;
-      color: #e5e7eb;
+      min-height: 100vh;
+      background:
+        radial-gradient(900px circle at 12% 10%, rgba(99, 102, 241, 0.22), transparent 55%),
+        radial-gradient(900px circle at 85% 20%, rgba(6, 182, 212, 0.18), transparent 55%),
+        radial-gradient(900px circle at 40% 95%, rgba(34, 197, 94, 0.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     }
     .card {
-      background: #020617;
-      border: 1px solid #1e293b;
-      border-radius: 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.1rem;
+      backdrop-filter: blur(10px);
     }
     .form-control, .form-control:focus {
-      background: #020617;
-      border-color: #1e293b;
-      color: #e5e7eb;
+      background: rgba(2, 6, 23, 0.55);
+      border-color: var(--border);
+      color: var(--text);
     }
     .form-control::placeholder {
-      color: #6b7280;
+      color: rgba(148, 163, 184, 0.65);
+    }
+    .input-group-text {
+      background: rgba(2, 6, 23, 0.55);
+      border-color: var(--border);
+      color: rgba(226, 232, 240, 0.85);
     }
     .btn-primary {
-      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      background: linear-gradient(135deg, var(--accentA), var(--accentB));
       border: none;
+      box-shadow: 0 18px 40px rgba(6, 182, 212, 0.12);
     }
     .btn-primary:hover {
       background: linear-gradient(135deg, #4f46e5, #0891b2);
     }
     .badge-elastic {
-      background: #22c55e;
+      background: var(--good);
     }
     .badge-inelastic {
-      background: #f97316;
+      background: var(--warn);
     }
     .badge-unit {
-      background: #3b82f6;
+      background: var(--info);
     }
     .chart-wrap {
-      background: #0b1220;
-      border: 1px solid #1e293b;
+      background: rgba(11, 18, 32, 0.7);
+      border: 1px solid var(--border);
       border-radius: 0.75rem;
       padding: 1rem;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .pill {
+      border: 1px solid var(--border);
+      background: rgba(2, 6, 23, 0.45);
+      border-radius: 999px;
+      padding: 0.35rem 0.65rem;
+      color: rgba(226, 232, 240, 0.92);
+      font-size: 0.9rem;
+    }
+    .kpi {
+      background: rgba(2, 6, 23, 0.45);
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      padding: 0.85rem 0.9rem;
+    }
+    .kpi .label {
+      color: rgba(148, 163, 184, 0.85);
+      font-size: 0.85rem;
+    }
+    .kpi .value {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.2px;
+    }
+    .brandbar {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      background: rgba(2, 6, 23, 0.35);
+      backdrop-filter: blur(10px);
     }
   </style>
 </head>
 <body>
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-7">
-        <div class="text-center mb-4">
-          <h1 class="fw-bold">Price Elasticity of Demand (PED)</h1>
-          <p class="text-secondary">
-            Enter initial and new prices and quantities to calculate PED using the arc elasticity formula.
-          </p>
-        </div>
+  <nav class="navbar brandbar sticky-top">
+    <div class="container py-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="fw-semibold">PED Calculator</div>
+        <span class="pill">Arc elasticity</span>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <a class="btn btn-sm btn-outline-light" href="/">Reset</a>
+      </div>
+    </div>
+  </nav>
 
-        <div class="card shadow-lg p-4 mb-4">
-          <form method="post" novalidate>
+  <div class="container py-4 py-lg-5">
+    <div class="row align-items-start g-4">
+      <div class="col-12">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-end gap-3 mb-2">
+          <div>
+            <h1 class="fw-bold mb-1">Price Elasticity of Demand</h1>
+            <div class="muted">
+              Compute PED from two price–quantity observations using the arc (midpoint) method.
+            </div>
+          </div>
+          <div class="pill">
+            \( PED = \frac{\Delta Q / Q_{avg}}{\Delta P / P_{avg}} \)
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <div class="card shadow-lg p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-semibold">Inputs</div>
+            <div class="muted small">Enter numeric values</div>
+          </div>
+
+          <form id="pedForm" method="post" novalidate>
             <div class="row g-3">
-              <div class="col-md-6">
-                <label for="p1" class="form-label">Initial Price (P₁)</label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  min="0"
-                  class="form-control"
-                  id="p1"
-                  name="p1"
-                  placeholder="e.g. 10.0"
-                  required
-                />
+              <div class="col-12">
+                <div class="muted small mb-1">Prices</div>
               </div>
               <div class="col-md-6">
-                <label for="p2" class="form-label">New Price (P₂)</label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  min="0"
-                  class="form-control"
-                  id="p2"
-                  name="p2"
-                  placeholder="e.g. 12.0"
-                  required
-                />
+                <label for="p1" class="form-label">Initial price (P₁)</label>
+                <div class="input-group">
+                  <span class="input-group-text">P₁</span>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    class="form-control"
+                    id="p1"
+                    name="p1"
+                    value="{{ form_values.p1 }}"
+                    placeholder="10.0"
+                    required
+                  />
+                  <div class="invalid-feedback">Please enter P₁.</div>
+                </div>
               </div>
               <div class="col-md-6">
-                <label for="q1" class="form-label">Initial Quantity (Q₁)</label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  min="0"
-                  class="form-control"
-                  id="q1"
-                  name="q1"
-                  placeholder="e.g. 100"
-                  required
-                />
+                <label for="p2" class="form-label">New price (P₂)</label>
+                <div class="input-group">
+                  <span class="input-group-text">P₂</span>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    class="form-control"
+                    id="p2"
+                    name="p2"
+                    value="{{ form_values.p2 }}"
+                    placeholder="12.0"
+                    required
+                  />
+                  <div class="invalid-feedback">Please enter P₂.</div>
+                </div>
+              </div>
+
+              <div class="col-12 mt-2">
+                <div class="muted small mb-1">Quantities</div>
               </div>
               <div class="col-md-6">
-                <label for="q2" class="form-label">New Quantity (Q₂)</label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  min="0"
-                  class="form-control"
-                  id="q2"
-                  name="q2"
-                  placeholder="e.g. 80"
-                  required
-                />
+                <label for="q1" class="form-label">Initial quantity (Q₁)</label>
+                <div class="input-group">
+                  <span class="input-group-text">Q₁</span>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    class="form-control"
+                    id="q1"
+                    name="q1"
+                    value="{{ form_values.q1 }}"
+                    placeholder="100"
+                    required
+                  />
+                  <div class="invalid-feedback">Please enter Q₁.</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="q2" class="form-label">New quantity (Q₂)</label>
+                <div class="input-group">
+                  <span class="input-group-text">Q₂</span>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    class="form-control"
+                    id="q2"
+                    name="q2"
+                    value="{{ form_values.q2 }}"
+                    placeholder="80"
+                    required
+                  />
+                  <div class="invalid-feedback">Please enter Q₂.</div>
+                </div>
               </div>
             </div>
 
@@ -125,58 +234,92 @@
                 Calculate PED
               </button>
             </div>
+
+            <div class="muted small mt-3">
+              Tip: Use the same time period and unit basis for both observations (e.g., weekly price and weekly quantity).
+            </div>
           </form>
         </div>
 
         {% if error %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger mt-3" role="alert">
           {{ error }}
         </div>
         {% endif %}
+      </div>
 
+      <div class="col-12 col-lg-7">
         {% if result %}
         <div class="card shadow-lg p-4">
-          <h5 class="mb-3">Result</h5>
-          <p class="mb-1">
-            <strong>Initial price (P₁):</strong> {{ result.p1 }}
-          </p>
-          <p class="mb-1">
-            <strong>New price (P₂):</strong> {{ result.p2 }}
-          </p>
-          <p class="mb-1">
-            <strong>Initial quantity (Q₁):</strong> {{ result.q1 }}
-          </p>
-          <p class="mb-3">
-            <strong>New quantity (Q₂):</strong> {{ result.q2 }}
-          </p>
+          <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+              <div class="muted small">Elasticity result</div>
+              <div class="d-flex align-items-end gap-2">
+                <div class="display-6 fw-bold mb-0">PED</div>
+                <div class="display-6 fw-bold mb-0">=</div>
+                <div class="display-6 fw-bold mb-0">{{ result.ped }}</div>
+              </div>
+              <div class="muted small mt-1">
+                Note: For many “normal” goods, PED is typically negative (price up → quantity down).
+              </div>
+            </div>
 
-          <h3 class="fw-bold">
-            PED = {{ result.ped }}
-          </h3>
-
-          {% set cls = result.classification %}
-          {% if "Elastic" in cls or "elastic" in cls %}
-            {% if "Inelastic" in cls or "inelastic" in cls %}
-              {% set badge_class = "badge-inelastic" %}
+            {% set cls = result.classification %}
+            {% if "Elastic" in cls or "elastic" in cls %}
+              {% if "Inelastic" in cls or "inelastic" in cls %}
+                {% set badge_class = "badge-inelastic" %}
+              {% else %}
+                {% set badge_class = "badge-elastic" %}
+              {% endif %}
+            {% elif "Unit" in cls or "unit" in cls %}
+              {% set badge_class = "badge-unit" %}
             {% else %}
-              {% set badge_class = "badge-elastic" %}
+              {% set badge_class = "badge-inelastic" %}
             {% endif %}
-          {% elif "Unit" in cls or "unit" in cls %}
-            {% set badge_class = "badge-unit" %}
-          {% else %}
-            {% set badge_class = "badge-inelastic" %}
-          {% endif %}
 
-          <span class="badge {{ badge_class }} mt-2">
-            {{ result.classification }}
-          </span>
+            <div class="text-end">
+              <div class="badge {{ badge_class }} px-3 py-2">
+                {{ result.classification }}
+              </div>
+              <div class="muted small mt-2">
+                |PED| vs 1
+              </div>
+            </div>
+          </div>
 
           <div class="row g-3 mt-3">
+            <div class="col-sm-6 col-lg-3">
+              <div class="kpi">
+                <div class="label">ΔPrice</div>
+                <div class="value">{{ result.delta_p }}</div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="kpi">
+                <div class="label">ΔQuantity</div>
+                <div class="value">{{ result.delta_q }}</div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="kpi">
+                <div class="label">%ΔPrice (arc)</div>
+                <div class="value">{{ result.pct_change_p }}%</div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="kpi">
+                <div class="label">%ΔQuantity (arc)</div>
+                <div class="value">{{ result.pct_change_q }}%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3 mt-2">
             <div class="col-md-6">
               <div class="chart-wrap">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <div class="fw-semibold">Demand plot (Price vs Quantity)</div>
-                  <div class="text-secondary small">P on Y, Q on X</div>
+                  <div class="fw-semibold">Demand plot</div>
+                  <div class="muted small">Price vs Quantity</div>
                 </div>
                 <canvas id="chartDemand" height="220"></canvas>
               </div>
@@ -184,22 +327,22 @@
             <div class="col-md-6">
               <div class="chart-wrap">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <div class="fw-semibold">% change (arc method)</div>
-                  <div class="text-secondary small">relative to average</div>
+                  <div class="fw-semibold">% changes</div>
+                  <div class="muted small">Arc method</div>
                 </div>
                 <canvas id="chartPct" height="220"></canvas>
               </div>
             </div>
           </div>
 
-          <hr class="border-secondary my-4" />
-          <p class="text-secondary mb-0">
-            Interpretation:
-            <br />
-            |PED| &lt; 1 → Inelastic (quantity changes less than price) <br />
-            |PED| = 1 → Unit elastic <br />
-            |PED| &gt; 1 → Elastic (quantity changes more than price)
-          </p>
+          <div class="mt-4">
+            <div class="muted small mb-1">Quick interpretation</div>
+            <div class="muted">
+              <div><strong>|PED| &lt; 1</strong> → Inelastic (quantity changes less than price)</div>
+              <div><strong>|PED| = 1</strong> → Unit elastic</div>
+              <div><strong>|PED| &gt; 1</strong> → Elastic (quantity changes more than price)</div>
+            </div>
+          </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -222,7 +365,7 @@
                   label: "Observed points",
                   data: demandPoints,
                   borderColor: "#06b6d4",
-                  backgroundColor: "#06b6d4",
+                  backgroundColor: "rgba(6, 182, 212, 0.9)",
                   showLine: true,
                   pointRadius: 5,
                   pointHoverRadius: 7,
@@ -242,12 +385,12 @@
                 scales: {
                   x: {
                     title: { display: true, text: "Quantity (Q)" },
-                    grid: { color: "rgba(148,163,184,0.15)" },
+                    grid: { color: "rgba(148,163,184,0.14)" },
                     ticks: { color: "#cbd5e1" }
                   },
                   y: {
                     title: { display: true, text: "Price (P)" },
-                    grid: { color: "rgba(148,163,184,0.15)" },
+                    grid: { color: "rgba(148,163,184,0.14)" },
                     ticks: { color: "#cbd5e1" }
                   }
                 }
@@ -261,7 +404,7 @@
                 datasets: [{
                   label: "Percent change",
                   data: [result.pct_change_p, result.pct_change_q],
-                  backgroundColor: ["rgba(99,102,241,0.8)", "rgba(34,197,94,0.8)"],
+                  backgroundColor: ["rgba(99,102,241,0.85)", "rgba(34,197,94,0.85)"],
                   borderColor: ["#6366f1", "#22c55e"],
                   borderWidth: 1
                 }]
@@ -283,7 +426,7 @@
                   },
                   y: {
                     title: { display: true, text: "Percent (%)" },
-                    grid: { color: "rgba(148,163,184,0.15)" },
+                    grid: { color: "rgba(148,163,184,0.14)" },
                     ticks: { color: "#cbd5e1" }
                   }
                 }
@@ -291,10 +434,32 @@
             });
           })();
         </script>
+        {% else %}
+        <div class="card shadow-lg p-4">
+          <div class="fw-semibold mb-2">Results will appear here</div>
+          <div class="muted">
+            Enter \(P_1, P_2, Q_1, Q_2\) and click <strong>Calculate PED</strong> to see the computed elasticity, key metrics, and charts.
+          </div>
+        </div>
         {% endif %}
       </div>
     </div>
   </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById("pedForm");
+      if (!form) return;
+
+      form.addEventListener("submit", function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add("was-validated");
+      }, false);
+    })();
+  </script>
 </body>
 </html>
 

@@ -45,13 +45,21 @@ def classify_ped(ped: float) -> str:
 def index():
     result = None
     error = None
+    form_values = {"p1": "", "p2": "", "q1": "", "q2": ""}
 
     if request.method == "POST":
         try:
-            p1 = float(request.form.get("p1", ""))
-            p2 = float(request.form.get("p2", ""))
-            q1 = float(request.form.get("q1", ""))
-            q2 = float(request.form.get("q2", ""))
+            form_values = {
+                "p1": (request.form.get("p1") or "").strip(),
+                "p2": (request.form.get("p2") or "").strip(),
+                "q1": (request.form.get("q1") or "").strip(),
+                "q2": (request.form.get("q2") or "").strip(),
+            }
+
+            p1 = float(form_values["p1"])
+            p2 = float(form_values["p2"])
+            q1 = float(form_values["q1"])
+            q2 = float(form_values["q2"])
 
             ped_value = calculate_ped(p1, p2, q1, q2)
             classification = classify_ped(ped_value)
@@ -72,7 +80,7 @@ def index():
         except (TypeError, ValueError) as exc:
             error = str(exc) or "Invalid input values. Please check your numbers."
 
-    return render_template("index.html", result=result, error=error)
+    return render_template("index.html", result=result, error=error, form_values=form_values)
 
 
 if __name__ == "__main__":
